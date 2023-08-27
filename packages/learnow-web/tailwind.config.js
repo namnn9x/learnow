@@ -10,8 +10,18 @@ module.exports = {
     ),
     ...createGlobPatternsForDependencies(__dirname),
   ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+  rippleui: {
+    themes: [
+			{
+				themeName: "light",
+				colorScheme: "light",
+				colors: {
+					primary: "#FFA54F",
+          secondary: '#1973E8',
+          neutral: '#ffc06c'
+				},
+			},
+		],
+	},
+  plugins: [require("rippleui")],
 };
