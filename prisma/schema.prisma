@@ -6,6 +6,63 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+type CurrentTopic {
+  id              String
+  level           String
+}
+
+enum Level {
+  NEWBIE
+  INTERMEDIATE
+  ADVANCED
+}
+model User {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  email           String
+  password        String
+  country         String
+  photo           String
+  completedTopic  String[]
+  currentTopic    CurrentTopic
+  levelTarget     Level
+  levelCurrent    Level
+  levelOld        Level
+  createdAt       DateTime? @default(now())
+  createdBy       String?
+  updatedAt       DateTime?
+  updatedBy       String?
+}
+
+model Vocabulary {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String 
+  topic           Topic   @relation(fields: [topicId], references: [id])
+  topicId         String  @db.ObjectId
+}
+
+enum LevelQuestion {
+  Easy
+  Medium
+  Hard
+}
+
+model Questions {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  topicId         String  @db.ObjectId
+  topic           Topic   @relation(fields: [topicId], references: [id])
+  level           LevelQuestion
+}
+
+model Topic {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  vocabulary      Vocabulary[]
+  question        Questions[] 
+}
+
+
