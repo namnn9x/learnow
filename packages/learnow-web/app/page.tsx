@@ -1,10 +1,12 @@
-import Image from "next/image";
+"use client"
 
+import { Home } from './home'
 
-export default function Home() {
+export default function Page() {
   return (
-    <div className="flex">
-      Welcome to Learnow
+    <div className="bg-primary h-screen">
+      <Home/>
     </div>
   )
 }
+

@@ -1,10 +1,13 @@
-import Image from "next/image"
-import { Cards } from "./Cards"
+import { WhoCards } from "./WhoCards"
+import { WhoTitle } from "./WhoTitle"
 
-export default function Page(){
+export default function Page() {
   return (
-    <div className="h-screen flex justify-center items-center">
-      <Cards/>
+    <div className="h-screen relative">
+      <div className=" px-20 h-2/4 bg-primary" >
+        <WhoTitle/>
+      </div>
+      <WhoCards />
     </div>
   )
 }
