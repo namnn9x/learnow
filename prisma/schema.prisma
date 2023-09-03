@@ -20,8 +20,15 @@ enum Level {
   INTERMEDIATE
   ADVANCED
 }
+
+enum Roles {
+  MEMBER
+  ADMIN
+}
+
 model User {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
   email           String
   password        String
   country         String
@@ -35,11 +42,12 @@ model User {
   createdBy       String?
   updatedAt       DateTime?
   updatedBy       String?
+  roles           Roles
 }
 
 model Vocabulary {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  name            String 
+  name            String
   topic           Topic   @relation(fields: [topicId], references: [id])
   topicId         String  @db.ObjectId
 }
@@ -62,7 +70,7 @@ model Topic {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   vocabulary      Vocabulary[]
-  question        Questions[] 
+  question        Questions[]
 }
 
 
