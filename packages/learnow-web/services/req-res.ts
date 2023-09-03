@@ -1,10 +1,10 @@
 import axios from "axios";
-import { getAccessToken } from "../utils/auth";
-import { refreshAccessToken } from "./sign-in";
+import Router from 'next/router';
+import { getAccessToken, getRefreshToken } from "../utils/auth";
+import { refreshAccessToken } from "./auth";
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
-  timeout: 300000,
   headers: {
       'Content-Type': 'application/json',
   },
@@ -24,15 +24,20 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
   return response;
 }, async function (error) {
   const originalRequest = error.config
 
   if (error.response.status === 403 && !originalRequest._retry) {
-    const accessToken = await refreshAccessToken();
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+    const refreshToken = getRefreshToken()
+    if (!refreshToken) {
+      Router.push('/sign-in')
+      return
+    }
+
+    const accessToken = await refreshAccessToken(refreshToken);
+    const { token } = accessToken?.data
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     return instance(originalRequest);
   }
 
